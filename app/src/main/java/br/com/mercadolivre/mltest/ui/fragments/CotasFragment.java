@@ -1,6 +1,8 @@
 package br.com.mercadolivre.mltest.ui.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -45,6 +47,7 @@ public class CotasFragment extends Fragment {
     private String montant;
     private String bankId;
 
+    AlertDialog dialog;
 
     public void setPaymentMethodId(String paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
@@ -117,18 +120,37 @@ public class CotasFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        dialog.show();
                         Log.e("ERROR:", "" + e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.d("TAMANHO:", "" + allCotasList.size());
-                        adapter.notifyDataSetChanged();
+                        if(allCotasList.size()==0){
+                            dialog.show();
+                        }else {
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 });
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Las cotas no están disponibles")
+                .setTitle("¡Atención!");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finishActivity();
+            }
+        });
+        dialog = builder.create();
 
         return view;
+    }
+
+    private void finishActivity(){
+        if(getActivity()!=null){
+            getActivity().finish();
+        }
     }
 
 

@@ -1,7 +1,9 @@
 package br.com.mercadolivre.mltest.ui.fragments;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -41,6 +43,8 @@ public class BankFragment extends Fragment {
     private MyBankRecyclerViewAdapter adapter;
 
     private String paymentMethodId;
+
+    AlertDialog dialog;
 
     public void setPaymentMethodId(String paymentMethodId){
         this.paymentMethodId=paymentMethodId;
@@ -106,20 +110,38 @@ public class BankFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        dialog.show();
                         Log.e("ERROR:",""+e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.d("TAMANHO:",""+allBankList.size());
-                        adapter.notifyDataSetChanged();
+                        if(allBankList.size()==0){
+                            dialog.show();
+                        }else{
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 });
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Los bancos no están disponibles")
+                .setTitle("¡Atención!");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finishActivity();
+            }
+        });
+        dialog = builder.create();
 
         return view;
     }
 
+    private void finishActivity(){
+        if(getActivity()!=null){
+            getActivity().finish();
+        }
+    }
 
     @Override
     public void onAttach(Context context) {

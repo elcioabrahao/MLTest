@@ -1,6 +1,8 @@
 package br.com.mercadolivre.mltest.ui.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,6 +22,7 @@ import br.com.mercadolivre.mltest.R;
 import br.com.mercadolivre.mltest.domain.api.MercadolivreAPI;
 import br.com.mercadolivre.mltest.domain.api.MercadolivreAPIService;
 import br.com.mercadolivre.mltest.domain.model.paymentmethod.PaymentMethod;
+import br.com.mercadolivre.mltest.ui.activities.PaymentMethodActivity;
 import br.com.mercadolivre.mltest.ui.adapters.MyPaymentMethodRecyclerViewAdapter;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,6 +40,8 @@ public class PaymentMethodFragment extends Fragment {
     private List<PaymentMethod> allPaymentMethodList;
 
     private MyPaymentMethodRecyclerViewAdapter adapter;
+
+    AlertDialog dialog;
 
 
     public PaymentMethodFragment() {
@@ -99,20 +104,39 @@ public class PaymentMethodFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        dialog.show();
                         Log.e("ERROR:",""+e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
 
-                        Log.d("TAMANHO:",""+allPaymentMethodList.size());
-
-                        adapter.notifyDataSetChanged();
+                        if(allPaymentMethodList.size()==0){
+                            dialog.show();
+                        }else {
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 });
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Los medios de pago no están disponibles")
+                .setTitle("¡Atención!");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finishActivity();
+            }
+        });
+        dialog = builder.create();
 
         return view;
+    }
+
+
+    private void finishActivity(){
+        if(getActivity()!=null){
+            getActivity().finish();
+        }
     }
 
 

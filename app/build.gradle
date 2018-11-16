@@ -33,6 +33,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
 
@@ -58,5 +59,6 @@ dependencies {
     // desing
     implementation 'com.github.Shashank02051997:FancyGifDialog-Android:1.1'
     implementation 'in.shadowfax:proswipebutton:1.2'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
 
 }
