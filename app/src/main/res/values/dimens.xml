@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="logo_margin">5dp</dimen>
+    <dimen name="list_text_margin">5dp</dimen>
+    <dimen name="cotas_text_margin">10dp</dimen>
+
+</resources>
